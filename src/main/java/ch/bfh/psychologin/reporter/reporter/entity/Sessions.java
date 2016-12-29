@@ -23,4 +23,27 @@ public class Sessions implements Serializable {
     @Column
     private Time  stop;
 
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public Time getStart() {
+        return start;
+    }
+
+    public void setStart(Time start) {
+        this.start = start;
+    }
+
+    public Time getStop() {
+        return stop;
+    }
+
+    public void setStop(Time stop) {
+        this.stop = stop;
+    }
 }
