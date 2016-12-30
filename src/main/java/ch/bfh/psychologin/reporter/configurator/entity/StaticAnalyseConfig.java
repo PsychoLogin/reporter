@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import java.io.Serializable;
 
 /**
  * Created by Jan on 30.12.2016.
@@ -13,11 +14,13 @@ import javax.persistence.Table;
 @NamedQuery(name= StaticAnalyseConfig.GET_CONFIG, query="SELECT s from StaticAnalyseConfig s")
 @Entity
 @Table(name = "static_analyse_config")
-public class StaticAnalyseConfig {
+public class StaticAnalyseConfig implements Serializable {
 
     public static final String GET_CONFIG = "getConfig";
 
     @Id
+    private int id;
+
     @Column(name = "penalty_error_level")
     private int penaltyErrorLevel;
 

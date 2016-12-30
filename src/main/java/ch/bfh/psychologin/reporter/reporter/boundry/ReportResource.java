@@ -23,6 +23,7 @@ public class ReportResource {
     @PersistenceUnit(unitName = "pyslogin")
     EntityManagerFactory emf;
 
+
     @Produces(MediaType.APPLICATION_JSON)
     @Path("login")
     @GET
