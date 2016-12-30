@@ -17,11 +17,14 @@ public class Sessions implements Serializable {
     @Id
     private long id;
 
-    @Column
-    private Time  start;
+    @Column(name = "blog_user_id")
+    private long blogUserId;
 
     @Column
-    private Time  stop;
+    private Time start;
+
+    @Column
+    private Time stop;
 
     public long getId() {
         return id;
@@ -29,6 +32,14 @@ public class Sessions implements Serializable {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public long getBlogUserId() {
+        return blogUserId;
+    }
+
+    public void setBlogUserId(long blogUserId) {
+        this.blogUserId = blogUserId;
     }
 
     public Time getStart() {
