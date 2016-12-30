@@ -1,44 +1,44 @@
-package ch.bfh.psychologin.reporter.reporter.boundry;
+package ch.bfh.psychologin.reporter.configurator.boundry;
 
-import ch.bfh.psychologin.reporter.reporter.entity.StaticSessionData;
+import ch.bfh.psychologin.reporter.configurator.entity.StaticAnalyseConfig;
 
-import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceUnit;
+import javax.persistence.TypedQuery;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.List;
 
 /**
- * Created by Jan on 28.12.2016.
+ * Created by Jan on 30.12.2016.
  */
-@Stateless
-@Path("report")
-public class ReportResource {
 
-    @PersistenceUnit(unitName = "pyslogin")
+@Path("config")
+public class ConfigurationResource {
+
+    @PersistenceUnit(unitName = "psylogin_config")
     EntityManagerFactory emf;
 
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("login")
+    @Path("static")
     @GET
-    public Response getStaticSessionData() {
-        EntityManager entityManager = emf.createEntityManager();
-        List<StaticSessionData> resultList = entityManager.createNamedQuery(StaticSessionData.FIND_ALL, StaticSessionData.class)
-                .getResultList();
+    public Response getStaticConfiguration() {
 
+        EntityManager entityManager = emf.createEntityManager();
+        TypedQuery<StaticAnalyseConfig> namedQuery = entityManager.createNamedQuery(StaticAnalyseConfig.GET_CONFIG, StaticAnalyseConfig.class);
+        StaticAnalyseConfig result = namedQuery.getSingleResult();
         entityManager.close();
+
         return Response.ok()
                 .header("Access-Control-Allow-Origin", "*")
                 .header("Access-Control-Allow-Headers", "origin, content-type, accept, authorization")
                 .header("Access-Control-Allow-Credentials", "true")
                 .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD")
                 .header("Access-Control-Max-Age", "1209600")
-                .entity(resultList)
+                .entity(result)
                 .build();
     }
 }
