@@ -8,6 +8,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -17,11 +18,18 @@ import javax.persistence.Table;
  */
 
 @Entity
-@NamedQuery(name = StaticSessionData.FIND_ALL, query = "SELECT s from StaticSessionData s JOIN FETCH s.session")
+@NamedQueries({
+        @NamedQuery(name = StaticSessionData.FIND_ALL, query = "SELECT s from StaticSessionData s JOIN FETCH s.session"),
+        @NamedQuery(name = StaticSessionData.USER_DATA_BROWSER, query = "SELECT count(s), s.browser as browser from StaticSessionData s where s.session.blogUser.userName = :username group by s.browser"),
+        @NamedQuery(name = StaticSessionData.USER_DATA_LOCATION, query = "SELECT count(s), s.location as browser from StaticSessionData s where s.session.blogUser.userName = :username group by s.location")
+
+})
 @Table(name = "static_session_datas")
 public class StaticSessionData {
 
     public static final String FIND_ALL = "StaticSessionData.findAll";
+    public static final String USER_DATA_BROWSER = "userDataBrowser";
+    public static final String USER_DATA_LOCATION = "userDataLocation";
     @Id
     @Column(name = "session_id")
     private long sessionId;
