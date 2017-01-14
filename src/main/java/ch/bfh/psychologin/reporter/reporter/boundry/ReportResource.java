@@ -1,10 +1,15 @@
 package ch.bfh.psychologin.reporter.reporter.boundry;
 
+import ch.bfh.psychologin.reporter.reporter.control.ActionTransformer;
+import ch.bfh.psychologin.reporter.reporter.entity.Action;
 import ch.bfh.psychologin.reporter.reporter.entity.Alert;
+import ch.bfh.psychologin.reporter.reporter.entity.Keystroke;
+import ch.bfh.psychologin.reporter.reporter.entity.KeystrokeSession;
 import ch.bfh.psychologin.reporter.reporter.entity.Sessions;
 import ch.bfh.psychologin.reporter.reporter.entity.StaticSessionData;
 
 import javax.ejb.Stateless;
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceUnit;
@@ -25,6 +30,9 @@ import java.util.List;
 @Path("report")
 public class ReportResource {
 
+    @Inject
+    ActionTransformer transformer;
+
     @PersistenceUnit(unitName = "pyslogin")
     EntityManagerFactory emf;
 
@@ -40,6 +48,24 @@ public class ReportResource {
 
         return createResponse(resultList);
     }
+
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("keystrokes/{username}")
+    @GET
+    public Response getKeystrokes(@PathParam("username") String userName) {
+
+        EntityManager entityManager = emf.createEntityManager();
+        List<Action> resultList = entityManager
+                .createNamedQuery(Action.GET_KEY_DATA, Action.class)
+                .setParameter("blogUserName", userName)
+                .getResultList();
+        entityManager.close();
+
+        List<KeystrokeSession> keystrokesPerSession = transformer.transformToKeystrokesPerSession(resultList);
+
+        return createResponse(keystrokesPerSession);
+    }
+
 
     @Produces(MediaType.APPLICATION_JSON)
     @Path("login")
