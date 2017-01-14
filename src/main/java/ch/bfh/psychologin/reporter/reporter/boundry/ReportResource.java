@@ -1,5 +1,6 @@
 package ch.bfh.psychologin.reporter.reporter.boundry;
 
+import ch.bfh.psychologin.reporter.reporter.entity.Alert;
 import ch.bfh.psychologin.reporter.reporter.entity.Sessions;
 import ch.bfh.psychologin.reporter.reporter.entity.StaticSessionData;
 
@@ -27,11 +28,24 @@ public class ReportResource {
     @PersistenceUnit(unitName = "pyslogin")
     EntityManagerFactory emf;
 
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("alert")
+    @GET
+    public Response getAllArrays() {
+        EntityManager entityManager = emf.createEntityManager();
+        List<Alert> resultList = entityManager
+                .createNamedQuery(Alert.GET_ALL, Alert.class)
+                .getResultList();
+        entityManager.close();
+
+        return createResponse(resultList);
+    }
 
     @Produces(MediaType.APPLICATION_JSON)
     @Path("login")
     @GET
     public Response getStaticSessionData() {
+
         EntityManager entityManager = emf.createEntityManager();
         List<StaticSessionData> resultList = entityManager
                 .createNamedQuery(StaticSessionData.FIND_ALL, StaticSessionData.class)
@@ -39,15 +53,10 @@ public class ReportResource {
 
         entityManager.close();
 
-        return Response.ok()
-                .header("Access-Control-Allow-Origin", "*")
-                .header("Access-Control-Allow-Headers", "origin, content-type, accept, authorization")
-                .header("Access-Control-Allow-Credentials", "true")
-                .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD")
-                .header("Access-Control-Max-Age", "1209600")
-                .entity(resultList)
-                .build();
+        return createResponse(resultList);
     }
+
+
 
     @Produces(MediaType.APPLICATION_JSON)
     @Path("user/{name}/location")
@@ -68,14 +77,8 @@ public class ReportResource {
         mapToNameValue(response, sessionDatas);
 
 
-        return Response.ok()
-                .header("Access-Control-Allow-Origin", "*")
-                .header("Access-Control-Allow-Headers", "origin, content-type, accept, authorization")
-                .header("Access-Control-Allow-Credentials", "true")
-                .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD")
-                .header("Access-Control-Max-Age", "1209600")
-                .entity(response)
-                .build();
+
+        return createResponse(response);
     }
 
 
@@ -97,15 +100,7 @@ public class ReportResource {
 
         mapToNameValue(response, sessionDatas);
 
-
-        return Response.ok()
-                .header("Access-Control-Allow-Origin", "*")
-                .header("Access-Control-Allow-Headers", "origin, content-type, accept, authorization")
-                .header("Access-Control-Allow-Credentials", "true")
-                .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD")
-                .header("Access-Control-Max-Age", "1209600")
-                .entity(response)
-                .build();
+        return createResponse(response);
     }
 
     private void mapToNameValue(List<HashMap<String, Object>> response, List<Object[]> sessionDatas) {
@@ -138,13 +133,26 @@ public class ReportResource {
             response.add(map);
         });
 
+        return createResponse(response);
+
+//        return Response.ok()
+//                .header("Access-Control-Allow-Origin", "*")
+//                .header("Access-Control-Allow-Headers", "origin, content-type, accept, authorization")
+//                .header("Access-Control-Allow-Credentials", "true")
+//                .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD")
+//                .header("Access-Control-Max-Age", "1209600")
+//                .entity(response)
+//                .build();
+    }
+
+    private Response createResponse(List<?> resultList) {
         return Response.ok()
                 .header("Access-Control-Allow-Origin", "*")
                 .header("Access-Control-Allow-Headers", "origin, content-type, accept, authorization")
                 .header("Access-Control-Allow-Credentials", "true")
                 .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD")
                 .header("Access-Control-Max-Age", "1209600")
-                .entity(response)
+                .entity(resultList)
                 .build();
     }
 }
