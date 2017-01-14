@@ -50,14 +50,14 @@ public class ReportResource {
     }
 
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("keystrokes/{username}")
+    @Path("user/{name}/keystrokes")
     @GET
-    public Response getKeystrokes(@PathParam("username") String userName) {
+    public Response getKeystrokes(@PathParam("name") String name) {
 
         EntityManager entityManager = emf.createEntityManager();
         List<Action> resultList = entityManager
                 .createNamedQuery(Action.GET_KEY_DATA, Action.class)
-                .setParameter("blogUserName", userName)
+                .setParameter("blogUserName", name)
                 .getResultList();
         entityManager.close();
 
