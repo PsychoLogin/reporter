@@ -12,6 +12,7 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceUnit;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -33,18 +34,16 @@ public class ReportResource {
     @Inject
     ActionTransformer transformer;
 
-    @PersistenceUnit(unitName = "pyslogin")
-    EntityManagerFactory emf;
+    @PersistenceContext(unitName = "psylogin")
+    EntityManager em;
 
     @Produces(MediaType.APPLICATION_JSON)
     @Path("alert")
     @GET
     public Response getAllArrays() {
-        EntityManager entityManager = emf.createEntityManager();
-        List<Alert> resultList = entityManager
+        List<Alert> resultList = em
                 .createNamedQuery(Alert.GET_ALL, Alert.class)
                 .getResultList();
-        entityManager.close();
 
         return createResponse(resultList);
     }
@@ -54,12 +53,10 @@ public class ReportResource {
     @GET
     public Response getKeystrokes(@PathParam("name") String name) {
 
-        EntityManager entityManager = emf.createEntityManager();
-        List<Action> resultList = entityManager
+        List<Action> resultList = em
                 .createNamedQuery(Action.GET_KEY_DATA, Action.class)
                 .setParameter("blogUserName", name)
                 .getResultList();
-        entityManager.close();
 
         List<KeystrokeSession> keystrokesPerSession = transformer.transformToKeystrokesPerSession(resultList);
 
@@ -72,12 +69,10 @@ public class ReportResource {
     @GET
     public Response getStaticSessionData() {
 
-        EntityManager entityManager = emf.createEntityManager();
-        List<StaticSessionData> resultList = entityManager
+        List<StaticSessionData> resultList = em
                 .createNamedQuery(StaticSessionData.FIND_ALL, StaticSessionData.class)
                 .getResultList();
 
-        entityManager.close();
 
         return createResponse(resultList);
     }
@@ -91,14 +86,12 @@ public class ReportResource {
 
         List<HashMap<String, Object>> response = new ArrayList<>();
 
-        EntityManager em = emf.createEntityManager();
 
         List<Object[]> sessionDatas = em
                 .createNamedQuery(StaticSessionData.USER_DATA_LOCATION)
                 .setParameter("username", username)
                 .getResultList();
 
-        em.close();
 
         mapToNameValue(response, sessionDatas);
 
@@ -115,14 +108,12 @@ public class ReportResource {
 
         List<HashMap<String, Object>> response = new ArrayList<>();
 
-        EntityManager em = emf.createEntityManager();
 
         List<Object[]> sessionDatas = em
                 .createNamedQuery(StaticSessionData.USER_DATA_BROWSER)
                 .setParameter("username", username)
                 .getResultList();
 
-        em.close();
 
         mapToNameValue(response, sessionDatas);
 
@@ -144,12 +135,9 @@ public class ReportResource {
     public Response getUsers() {
         List<HashMap<String, Object>> response = new ArrayList<>();
 
-        EntityManager entityManager = emf.createEntityManager();
-        List<Object[]> resultList = entityManager
+        List<Object[]> resultList = em
                 .createNamedQuery(Sessions.USER_LOGINS)
                 .getResultList();
-
-        entityManager.close();
 
         resultList.forEach(row -> {
             HashMap<String, Object> map = new HashMap<>();
