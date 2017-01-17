@@ -116,16 +116,16 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var UserSessionDataService = (function () {
     function UserSessionDataService(http) {
         this.http = http;
-        this.serviceUrl = 'http://localhost:8080/reporter/resources/report/user'; // URL to web API
+        this.serviceUrl = '/reporter/resources/report/user'; // URL to web API
     }
     UserSessionDataService.prototype.getBrowserInfo = function (username) {
         return this.http
-            .get('http://localhost:8080/reporter/resources/report/user/' + username + '/browser', { headers: this.getHeaders() })
+            .get('/reporter/resources/report/user/' + username + '/browser', { headers: this.getHeaders() })
             .map(function (response) { return response.json(); });
     };
     UserSessionDataService.prototype.getLocationInfo = function (username) {
         return this.http
-            .get('http://localhost:8080/reporter/resources/report/user/' + username + '/location', { headers: this.getHeaders() })
+            .get('/reporter/resources/report/user/' + username + '/location', { headers: this.getHeaders() })
             .map(function (response) { return response.json(); });
     };
     UserSessionDataService.prototype.getUsers = function () {
@@ -135,12 +135,12 @@ var UserSessionDataService = (function () {
     };
     UserSessionDataService.prototype.getAlerts = function () {
         return this.http
-            .get('http://localhost:8080/reporter/resources/report/alert', { headers: this.getHeaders() })
+            .get('/reporter/resources/report/alert', { headers: this.getHeaders() })
             .map(function (response) { return response.json(); });
     };
     UserSessionDataService.prototype.getKeystrokes = function (username) {
         return this.http
-            .get('http://localhost:8080/reporter/resources/report/user/' + username + '/keystrokes', { headers: this.getHeaders() })
+            .get('/reporter/resources/report/user/' + username + '/keystrokes', { headers: this.getHeaders() })
             .map(function (response) { return response.json(); });
     };
     UserSessionDataService.prototype.getHeaders = function () {
@@ -183,7 +183,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var StaticConfigService = (function () {
     function StaticConfigService(http) {
         this.http = http;
-        this.serviceUrl = 'http://localhost:8080/reporter/resources/config/static'; // URL to web API
+        this.serviceUrl = '/reporter/resources/config/static'; // URL to web API
     }
     StaticConfigService.prototype.getStaticConfig = function () {
         return this.http
