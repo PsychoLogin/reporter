@@ -25,7 +25,7 @@ import javax.ws.rs.core.Response;
 @Path("config")
 public class ConfigurationResource {
 
-    @PersistenceContext(unitName = "psylogin_config")
+    @PersistenceContext(unitName = "psylogin")
     EntityManager em;
 
     @Produces(MediaType.APPLICATION_JSON)
