@@ -38,7 +38,7 @@ module.exports = ""
 /***/ 1184:
 /***/ function(module, exports) {
 
-module.exports = "<md-list>\n  <a md-list-item *ngFor=\"let alert of alerts\" routerLink=\"/logins/{{alert.blogUser.userName}}\">\n    {{alert.severity}} - {{alert.blogUser.userName}}\n  </a>\n</md-list>\n"
+module.exports = "<md-list>\n  <a md-list-item *ngFor=\"let alert of alerts\" routerLink=\"/logins/{{alert.blogUser.userName}}\">\n  {{alert.timeStamp}}  {{alert.severity}} - {{alert.blogUser.userName}}\n  </a>\n</md-list>\n"
 
 /***/ },
 
