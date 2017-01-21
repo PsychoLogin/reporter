@@ -15,7 +15,7 @@ import java.util.Date;
  * Created by Jan on 14.01.2017.
  */
 
-@NamedQuery(name = Alert.GET_ALL, query = "SELECT a from Alert a JOIN FETCH a.blogUser")
+@NamedQuery(name = Alert.GET_ALL, query = "SELECT a from Alert a JOIN FETCH a.blogUser order by a.timeStamp DESC")
 @Entity
 @Table(name = "alerts")
 public class Alert {
